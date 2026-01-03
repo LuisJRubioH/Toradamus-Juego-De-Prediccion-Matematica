@@ -1,0 +1,83 @@
+/* ==========================================
+    TORADAMUS - ESTILOS BASE
+    Variables CSS y estilos generales
+   ========================================== */
+
+:root {
+    /* Paleta de colores inicial: Azul Profundo */
+    --bg-start: #1a2a6c;
+    --bg-mid: #b21f1f;
+    --bg-end: #fdbb2d;
+    
+    --main-bg: #141E30;
+    --gradient-bg: linear-gradient(to right, #243B55, #141E30);
+    
+    /* Paleta final: Púrpura místico */
+    --final-bg: #2c0b38;
+    --final-gradient: linear-gradient(to right, #c9b084, #243B55);
+
+    /* Colores de acento */
+    --accent-gold: #efb810;
+    --text-light: #ffffff;
+    --panel-paper: #fdf6e3;
+    --text-dark: #1a3a5a;
+}
+
+/* ==========================================
+    ESTILOS GLOBALES
+   ========================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--main-bg);
+    background: var(--gradient-bg);
+    color: var(--text-dark);
+    font-family: 'Quicksand', sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    transition: background 1.5s ease;
+    overflow-x: hidden;
+}
+
+/* Estado final del body cuando se cumple la profecía */
+body.magic-end {
+    background: var(--final-bg);
+    background: var(--final-gradient);
+}
+
+/* ==========================================
+    RESPONSIVE DESIGN
+   ========================================== */
+
+@media (max-width: 900px) {
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .header-text {
+        text-align: center;
+    }
+    
+    .header-text h1 {
+        font-size: 2.5rem;
+    }
+    
+    .header-img {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .game-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Ajuste para móvil cuando se hace scroll */
+    body.scrolled .header-content {
+        flex-direction: row;
+    }
+}

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toradamus - El Oráculo Aritmético</title>
+    
+    <!-- Fuentes de Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Estilos CSS Modularizados -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/game.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+
+    <!--==========================================
+        HEADER ANIMADO
+        ========================================== -->
+    <header id="main-header">
+        <div class="header-content">
+            <img src="assets/Toradamus.jpg" alt="Toradamus" class="header-img">
+            <div class="header-text">
+                <h1>Toradamus</h1>
+                <div class="subtitle">The Prophetic Feline Arithmetic</div>
+            </div>
+        </div>
+        <div class="scroll-indicator">⬇ Desliza para jugar ⬇</div>
+    </header>
+
+    <!--==========================================
+        CONTENEDOR DEL JUEGO
+        ========================================== -->
+    <div class="game-wrapper">
+        <div class="game-layout">
+            
+            <!-- Panel Izquierdo: Historial del Usuario -->
+            <div class="side-panel">
+                <h3>Tus Números</h3>
+                <div id="user-history"></div>
+            </div>
+
+            <!-- Panel Central: Área de Juego -->
+            <div class="main-panel">
+                <!-- Suma Acumulada -->
+                <div id="running-sum-container" class="running-sum-container">
+                    Σ: <span id="running-sum-val">0</span>
+                </div>
+
+                <!-- Área de Input -->
+                <div id="input-area">
+                    <p id="instruction">Introduce un número de 4 cifras:</p>
+                    <input 
+                        type="number" 
+                        id="main-input" 
+                        placeholder="Ej: 1234"
+                    >
+                    <br><br>
+                    <button id="action-btn">Revelar Profecía</button>
+                    
+                    <div id="wisdom-quote"></div>
+
+                    <!-- Botones de fin de juego -->
+                    <div id="end-game-buttons">
+                        <button id="new-game-btn" class="btn-new-game">🔮 JUGAR DE NUEVO</button>
+                        <button id="share-btn" class="btn-share">Compartir Sabiduría</button>
+                    </div>
+                </div>
+
+                <!-- Caja de Predicción -->
+                <div id="prediction-box" class="prediction-display">
+                    <span style="font-size: 1rem; display:block; opacity: 0.8; font-weight:normal;">
+                        Predicción Final:
+                    </span>
+                    <span id="prediction-val"></span>
+                </div>
+            </div>
+
+            <!-- Panel Derecho: Historial de Toradamus -->
+            <div class="side-panel">
+                <h3>Toradamus</h3>
+                <div id="bot-history"></div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!--==========================================
+        SCRIPTS JAVASCRIPT MODULARIZADOS
+        ========================================== -->
+    <script type="module" src="js/main.js"></script>
+
+</body>
+</html>

@@ -38,17 +38,36 @@ Este principio permite que el resultado final sea conocido desde el inicio, inde
 
 
 ## Estructura del proyecto
-
-* `result_prediction.py`
-
-  * Contiene la lógica matemática del juego.
-  * Inicializa la predicción y define la transición de estado por turno.
-
-* `main.py`
-
-  * Maneja la interacción con el usuario.
-  * Controla el flujo del juego y los turnos.
-
+```bash
+toradamus-project/
+│
+├── backend/                       
+│   ├── api_server.py              # Servidor Flask API
+│   ├── result_prediction.py       # Lógica matemática 
+│   ├── main.py                    # Script de consola 
+│   └── requirements.txt           # Dependencias Python
+│
+├── frontend/
+│   ├── index.html                 # HTML modularizado 
+│   │
+│   ├── css/
+│   │   ├── styles.css            # Estilos base y variables
+│   │   ├── header.css            # Estilos del header animado
+│   │   ├── game.css              # Estilos de los paneles de juego
+│   │   └── animations.css        # Keyframes y animaciones
+│   │
+│   ├── js/
+│   │   ├── config.js             # Configuración y constantes (quotes)
+│   │   ├── animations.js         # Efectos visuales (sparkles, explosión)
+│   │   ├── game.js               # Lógica del juego (estado, turnos)
+│   │   ├── ui.js                 # Manipulación del DOM (typewriter, updates)
+│   │   └── main.js               # Inicialización y event listeners
+│   │
+│   └── assets/
+│       └── unnamed.jpg           # Imagen del gato Toradamus
+│
+└── README.md                      # Documentación del proyecto
+```
 
 
 ## Flujo del juego
