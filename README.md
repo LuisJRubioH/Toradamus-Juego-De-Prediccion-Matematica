@@ -1,5 +1,5 @@
 <p align="left">
-  <img src="toradamus.jpeg" width="40%">
+  <img src="toradamus.jpg" width="100%">
 </p>
 
 
@@ -11,7 +11,7 @@
 
 El proyecto está diseñado para **modelar explícitamente el estado del juego y su evolución por turnos**, separando de forma clara la lógica matemática del flujo de interacción con el usuario.
 
----
+
 
 ## Idea matemática
 
@@ -22,7 +22,7 @@ El juego se apoya en la siguiente regla:
 
 Este principio permite que el resultado final sea conocido desde el inicio, independientemente de las elecciones del jugador.
 
----
+
 
 ## Características principales
 
@@ -30,13 +30,12 @@ Este principio permite que el resultado final sea conocido desde el inicio, inde
 * Actualización explícita del **estado del juego** (suma parcial).
 * Separación clara entre:
 
-  * lógica del juego,
-  * control de flujo,
-  * interacción con el usuario.
+  * lógica del juego
+  * control de flujo
+  * interacción con el usuario
 * Validaciones mediante **excepciones explícitas**.
 * Código legible, modular y fácil de extender.
 
----
 
 ## Estructura del proyecto
 
@@ -50,7 +49,7 @@ Este principio permite que el resultado final sea conocido desde el inicio, inde
   * Maneja la interacción con el usuario.
   * Controla el flujo del juego y los turnos.
 
----
+
 
 ## Flujo del juego
 
@@ -63,7 +62,6 @@ Este principio permite que el resultado final sea conocido desde el inicio, inde
    * la suma parcial se actualiza.
 4. El juego termina cuando la suma parcial coincide con la predicción.
 
----
 
 ## Requisitos
 
@@ -71,7 +69,7 @@ Este principio permite que el resultado final sea conocido desde el inicio, inde
 
 No se requieren librerías externas.
 
----
+
 
 ## Ejecución
 
@@ -79,7 +77,7 @@ No se requieren librerías externas.
 python main.py
 ```
 
----
+
 
 ## Objetivo del proyecto
 
@@ -89,7 +87,6 @@ Este proyecto tiene un enfoque **didáctico y conceptual**, orientado a:
 * aplicar principios de diseño limpio,
 * y demostrar buenas prácticas en Python más allá de la simple implementación funcional.
 
----
 
 ## Autores:
 - **Oriana Giraldo**
