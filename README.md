@@ -1,5 +1,5 @@
-<p align="center">
-  <img src="toradamus.jpeg" width="60%">
+<p align="left">
+  <img src="toradamus.jpeg" width="40%">
 </p>
 
 
