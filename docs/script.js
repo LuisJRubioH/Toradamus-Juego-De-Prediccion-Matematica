@@ -206,7 +206,7 @@ async function processInput() {
 
 function shareResults() {
     const finalSum = predictionVal.innerText;
-    const shareText = `🔮 Toradamus predijo la suma exacta de mis números: ${finalSum}.\n\n "Incluso un gato negro sabe que 2+2 son 4... si yo lo digo." \n\n ¡Juega ahora!`;
+    const shareText = `🔮 Toradamus predijo la suma exacta de mis números: ${finalSum}.\n\n ${quotes[Math.floor(Math.random() * quotes.length)]} \n\n ¡Juega ahora!`;
     const fullMessage = `${shareText}\n\n${window.location.href}`;
     
     // Detectar si estamos en móvil para usar navigator.share
