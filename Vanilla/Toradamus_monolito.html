@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toradamus - El Oráculo Aritmético</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Paleta Inicial: Azul Profundo */
+            --bg-start: #1a2a6c;
+            --bg-mid: #b21f1f;
+            --bg-end: #fdbb2d;
+            
+            --main-bg: #141E30; /* Azul oscuro elegante */
+            --gradient-bg: linear-gradient(to right, #243B55, #141E30);
+            
+            --final-bg: #2c0b38; /* Púrpura místico para el final */
+            --final-gradient: linear-gradient(to right,  #c9b084,#243B55);
+
+            --accent-gold: #efb810;
+            --text-light: #ffffff;
+            --panel-paper: #fdf6e3; /* Color pergamino para los paneles */
+            --text-dark: #1a3a5a;
+        }
+
+        body {
+            background: var(--main-bg);
+            background: var(--gradient-bg);
+            color: var(--text-dark);
+            font-family: 'Quicksand', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            transition: background 1.5s ease;
+            overflow-x: hidden;
+        }
+
+        /* Estado final del body */
+        body.magic-end {
+            background: var(--final-bg);
+            background: var(--final-gradient);
+        }
+
+        /* --- HEADER ANIMADO --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh; /* Ocupa toda la pantalla al inicio */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            z-index: 100;
+            transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+            padding: 0 5%;
+            box-sizing: border-box;
+        }
+
+        /* Contenedor interno para dividir 50/50 */
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 1200px;
+            gap: 40px;
+            transition: all 0.6s ease;
+        }
+
+        .header-img {
+            width: 350px;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 50%;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
+            border: 5px solid var(--accent-gold);
+            transition: all 0.6s ease;
+        }
+
+        .header-text {
+            color: var(--text-light);
+            text-align: left;
+            transition: all 0.6s ease;
+        }
+
+        .header-text h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 4rem;
+            margin: 0;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            line-height: 1.1;
+        }
+
+        .header-text .subtitle {
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+            margin-top: 10px;
+        }
+
+        /* Flecha para indicar scroll */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--text-light);
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+            opacity: 1;
+            transition: opacity 0.3s;
+        }
+
+        /* --- ESTADO SCROLLED (Cabecera pequeña) --- */
+        body.scrolled header {
+            height: 100px; /* Altura reducida */
+            background: rgba(20, 30, 48, 0.95); /* Fondo sólido semi-transparente */
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            padding: 0 20px;
+        }
+
+        body.scrolled .header-content {
+            justify-content: flex-start;
+            gap: 20px;
+        }
+
+        body.scrolled .header-img {
+            width: 70px;
+            height: 70px;
+            border-width: 2px;
+            box-shadow: none;
+        }
+
+        body.scrolled .header-text h1 {
+            font-size: 1.8rem;
+        }
+        
+        body.scrolled .subtitle h1 {
+            font-size:  1.8rem;
+        }
+
+        body.scrolled .scroll-indicator {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* --- CONTENEDOR DEL JUEGO --- */
+        .game-wrapper {
+            margin-top: 100vh; /* Empuja el juego debajo de la cabecera inicial */
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 80vh;
+        }
+
+        .game-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px 1fr;
+            gap: 25px;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        /* Paneles con estilo de papel/pergamino para contraste */
+        .side-panel {
+            background: var(--panel-paper);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #d4c5a3;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+            color: #3e2723; /* Marrón oscuro para texto */
+        }
+
+        .side-panel h3 {
+            border-bottom: 2px solid #3e2723;
+            padding-bottom: 5px;
+            margin-top: 0;
+            font-family: 'Cinzel', serif;
+        }
+
+        .main-panel {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 20px;
+        }
+
+        /* Suma Acumulada */
+        .running-sum-container {
+            background: var(--accent-gold);
+            color: #2c0b38;
+            padding: 10px 30px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 1.5rem;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+            display: none;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        input {
+            padding: 15px;
+            border: 3px solid #3e2723;
+            border-radius: 10px;
+            width: 80%;
+            font-size: 1.5rem;
+            text-align: center;
+            background: #fff;
+            color: #3e2723;
+            outline: none;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: bold;
+        }
+
+        button {
+            background-color: var(--accent-gold);
+            color: #2c0b38;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            background-color: #fff;
+        }
+
+        .btn-new-game {
+            background-color: #ffffff;
+            color: var(--final-bg);
+            margin-top: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        .btn-share {
+            background-color: #25d366; 
+            color: white; 
+            margin-top: 10px;
+        }
+
+        .prediction-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            padding: 20px;
+            color: var(--accent-gold);
+            text-shadow: 0 0 10px rgba(0,0,0,0.5);
+            margin-top: 10px;
+            display: none;
+            border-top: 2px solid rgba(255,255,255,0.2);
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+        }
+
+        #wisdom-quote {
+            font-style: italic;
+            margin-top: 20px;
+            min-height: 60px;
+            color: var(--text-light);
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 10px;
+        }
+
+        .sparkle {
+            position: absolute;
+            pointer-events: none;
+            width: 15px; /* Un poco más grandes para que se vea la forma */
+            height: 15px;
+            /* Forma de estrella geométrica */
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            z-index: 9999;
+            animation: fly 0.8s ease-out forwards, spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fly {
+            0% { transform: translate(0,0) scale(0); opacity: 0; }
+            20% { opacity: 1; transform: scale(1.2); }
+            100% { transform: translate(var(--x), var(--y)) scale(0); opacity: 0; }
+        }
+
+        .number-entry { font-size: 1.3rem; margin: 10px 0; font-weight: bold; }
+        
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);} 40% {transform: translateX(-50%) translateY(-20px);} 60% {transform: translateX(-50%) translateY(-10px);} }
+        @keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(255, 255, 255, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } }
+        @keyframes fly { 0% { transform: translate(0,0) scale(1); opacity: 1; } 100% { transform: translate(var(--x), var(--y)) scale(0); opacity: 0; } }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .header-content { flex-direction: column; text-align: center; }
+            .header-text { text-align: center; }
+            .header-text h1 { font-size: 2.5rem; }
+            .header-img { width: 250px; height: 250px; }
+            .game-layout { grid-template-columns: 1fr; }
+            
+            /* Ajuste para móvil cuando se hace scroll */
+            body.scrolled .header-content { flex-direction: row; }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="main-header">
+        <div class="header-content">
+            <img src="unnamed.jpg" alt="Toradamus" class="header-img">
+            <div class="header-text">
+                <h1>Toradamus</h1>
+                <div class="subtitle">The Prophetic Feline Arithmetic</div>
+            </div>
+        </div>
+        <div class="scroll-indicator">⬇ Desliza para jugar ⬇</div>
+    </header>
+
+    <div class="game-wrapper">
+        <div class="game-layout">
+            <div class="side-panel">
+                <h3>Tus Números</h3>
+                <div id="user-history"></div>
+            </div>
+
+            <div class="main-panel">
+                <div id="running-sum-container" class="running-sum-container">
+                    Σ: <span id="running-sum-val">0</span>
+                </div>
+
+                <div id="input-area" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+                    <p id="instruction" style="color:white; font-size:1.2rem;">Introduce un número de 4 cifras:</p>
+                    <input type="number" id="main-input" placeholder="Ej: 1234" onkeydown="if(event.key==='Enter') processInput()">
+                    <br><br>
+                    <button id="action-btn" onclick="processInput()">Revelar Profecía</button>
+                    
+                    <div id="wisdom-quote"></div>
+
+                    <div id="end-game-buttons" style="display:none; flex-direction:column; gap:10px; width:100%; align-items:center;">
+                        <button id="new-game-btn" class="btn-new-game" onclick="resetGame()">🔮 JUGAR DE NUEVO</button>
+                        <button id="share-btn" class="btn-share" onclick="shareResults()">Compartir Sabiduría</button>
+                    </div>
+                </div>
+
+                <div id="prediction-box" class="prediction-display">
+                    <span style="font-size: 1rem; display:block; opacity: 0.8; font-weight:normal;">Predicción Final:</span>
+                    <span id="prediction-val"></span>
+                </div>
+            </div>
+
+            <div class="side-panel">
+                <h3>Toradamus</h3>
+                <div id="bot-history"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Lógica de Scroll
+        window.addEventListener('scroll', () => {
+            const body = document.body;
+            if (window.scrollY > 100) {
+                body.classList.add('scrolled');
+            } else {
+                body.classList.remove('scrolled');
+            }
+        });
+
+        // Lógica del Juego
+        let gameState = "START"; 
+        let prediction = 0;
+        let turnCount = 0;
+        let userNumbers = []; 
+        let currentRunningSum = 0;
+
+        const quotes = [
+            "«El destino es un hilo de lana que yo ya he desenredado.»",
+            "«Los números no mienten, aunque a veces ronronean.»",
+            "«He visto el futuro en el fondo de un cuenco de leche.»",
+            "«Siete vidas no bastan para entender mi poder matemático.»",
+            "«Incluso un gato negro sabe que 2+2 son 4... si yo lo digo.»",
+            "«Pitágoras era un aficionado comparado con un gato persiguiendo un láser.»",
+            "«Tu mente humana suma; mi mente felina trasciende el cálculo.»",
+            "«He calculado la trayectoria de esta suma antes de que tocaras el teclado.»",
+            "«El caos del universo se ordena cuando me afilo las uñas.»",
+            "«¿Schrödinger? Él dudaba. Yo siempre sé el resultado exacto.»",
+            "«Mis bigotes detectan vibraciones numéricas que tú no puedes ver.»",
+            "«Esta predicción estaba escrita en las estrellas... y en mi caja de arena.»",
+            "«No es magia, es lógica felina superior.»",
+            "«Humanos... siempre necesitan comprobarlo todo. Yo solo lo sé.»",
+            "«La respuesta correcta brilla en la oscuridad, como mis ojos.»"
+        ];
+
+        const mainInput = document.getElementById('main-input');
+        const instruction = document.getElementById('instruction');
+        const actionBtn = document.getElementById('action-btn');
+        const userHistory = document.getElementById('user-history');
+        const botHistory = document.getElementById('bot-history');
+        const predictionBox = document.getElementById('prediction-box');
+        const predictionVal = document.getElementById('prediction-val');
+        const wisdomQuote = document.getElementById('wisdom-quote');
+        const endGameButtons = document.getElementById('end-game-buttons');
+        const runningSumContainer = document.getElementById('running-sum-container');
+        const runningSumVal = document.getElementById('running-sum-val');
+
+        async function typeWriter(text, elementId, speed = 50) {
+            const el = document.createElement('div');
+            el.className = 'number-entry';
+            document.getElementById(elementId).appendChild(el);
+            for (let i = 0; i < text.length; i++) {
+                el.innerHTML += text.charAt(i);
+                await new Promise(r => setTimeout(r, speed));
+            }
+        }
+
+        function createSparkles(el) {
+            const rect = el.getBoundingClientRect();
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            // Ajuste para cuando el botón está fixed o en flow diferente
+            // Usamos coordenadas relativas al elemento
+            for (let i = 0; i < 30; i++) {
+                const s = document.createElement('div');
+                s.className = 'sparkle';
+                s.style.left = centerX + 'px';
+                s.style.top = centerY + 'px';
+                s.style.setProperty('--x', `${(Math.random() - 0.5) * 250}px`);
+                s.style.setProperty('--y', `${(Math.random() - 0.5) * 250}px`);
+                s.style.backgroundColor = Math.random() > 0.5 ? '#ffd700' : '#ffffff';
+                el.appendChild(s);
+                setTimeout(() => s.remove(), 800);
+            }
+        }
+
+        function screenExplosion() {
+    const burstCount = 120; // Cantidad de estrellas
+    
+    for (let i = 0; i < burstCount; i++) {
+        const s = document.createElement('div');
+        s.className = 'sparkle';
+        
+        // Posición inicial aleatoria en toda la ventana visible
+        const posX = Math.random() * window.innerWidth;
+        const posY = Math.random() * window.innerHeight;
+        
+        // Ajustamos la posición considerando el scroll actual
+        s.style.left = posX + 'px';
+        s.style.top = (posY + window.scrollY) + 'px';
+        
+        // Dirección de explosión (más amplia para las estrellas)
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 100 + Math.random() * 200;
+        const x = Math.cos(angle) * distance;
+        const y = Math.sin(angle) * distance;
+        
+        s.style.setProperty('--x', `${x}px`);
+        s.style.setProperty('--y', `${y}px`);
+        
+        // Colores de oráculo: Oro, Blanco, Diamante y Violeta
+        const colors = ['#ffd700', '#ffffff', '#e0e0e0', '#f4d03f', '#a569bd'];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        s.style.backgroundColor = color;
+        s.style.boxShadow = `0 0 15px ${color}`;
+        
+        document.body.appendChild(s);
+        
+        // Eliminación del elemento para no saturar la memoria
+        setTimeout(() => s.remove(), 800);
+    }
+}
+
+        function updateRunningSum(val) {
+            currentRunningSum += val;
+            runningSumVal.innerText = currentRunningSum;
+            // Pequeña animación de escala cada vez que se actualiza
+            runningSumContainer.style.transform = "scale(1.2)";
+            setTimeout(() => runningSumContainer.style.transform = "scale(1)", 200);
+        }
+
+        async function processInput() {
+            const val = parseInt(mainInput.value);
+            if (isNaN(val) || val < 100 || val > 9999) return alert("¡Miau! Necesito un número de 3 o 4 cifras.");
+
+            userNumbers.push(val);
+
+            if (gameState === "START") {
+                createSparkles(actionBtn);
+                setTimeout(() => createSparkles(actionBtn), 900);
+                setTimeout(() => createSparkles(actionBtn), 300);
+                setTimeout(() => createSparkles(actionBtn), 600);
+                prediction = 20000 + val - 2;
+                predictionVal.innerText = prediction;
+                predictionBox.style.display = 'block';
+                
+                runningSumContainer.style.display = 'inline-block';
+                updateRunningSum(val);
+
+                await typeWriter(`Humano: ${val}`, 'user-history');
+                gameState = "PLAYING";
+                instruction.innerText = "Ingresa el siguiente número:";
+                mainInput.value = "";
+                turnCount = 1;
+                
+                // Auto scroll suave hacia abajo para asegurar que se ve el juego
+                window.scrollTo({ top: window.innerHeight*0.9, behavior: 'smooth' });
+            } 
+            else if (gameState === "PLAYING") {
+                turnCount++;
+                updateRunningSum(val);
+                await typeWriter(`Humano: ${val}`, 'user-history');
+                
+                let response = 9999 - val;
+                mainInput.value = "";
+                mainInput.disabled = true;
+                
+                updateRunningSum(response); 
+
+                await typeWriter(`Toradamus: `, 'bot-history');
+                const lastEntry = botHistory.lastElementChild;
+                for (let i = 0; i < response.toString().length; i++) {
+                    lastEntry.innerHTML += response.toString().charAt(i);
+                    await new Promise(r => setTimeout(r, 100));
+                }
+
+                if (turnCount < 3) {
+                    mainInput.disabled = false;
+                    instruction.innerText = "Un último número:";
+                    mainInput.focus();
+                } else {
+                    document.body.classList.add('magic-end');
+                    // ... cuando se cumple la profecía ...
+                    screenExplosion();
+                    // Una segunda oleada 200 milisegundos después para dar profundidad
+                    setTimeout(screenExplosion, 200);
+                    instruction.innerHTML = "<strong>✨ PROFECÍA CUMPLIDA ✨</strong>";
+                    actionBtn.style.display = 'none';
+                    mainInput.style.display = 'none';
+                    wisdomQuote.innerText = quotes[Math.floor(Math.random() * quotes.length)];
+                    endGameButtons.style.display = 'flex';
+                    
+                    // Explosión de chispas en toda la pantalla
+                    createSparkles(document.body);
+                }
+            }
+        }
+
+        function shareResults() {
+            const finalSum = predictionVal.innerText;
+            const shareText = `🔮 Toradamus predijo la suma exacta de mis números: ${finalSum}. "Incluso un gato negro sabe que 2+2 son 4... si yo lo digo." ¡Juega ahora!`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Toradamus',
+                    text: shareText,
+                    url: window.location.href
+                });
+            } else {
+                alert("Copia tu resultado: " + shareText);
+            }
+        }
+
+        function resetGame() {
+            document.body.classList.remove('magic-end');
+            gameState = "START";
+            turnCount = 0;
+            userNumbers = [];
+            currentRunningSum = 0;
+            runningSumVal.innerText = "0";
+            runningSumContainer.style.display = 'none';
+
+            userHistory.innerHTML = "";
+            botHistory.innerHTML = "";
+            predictionBox.style.display = 'none';
+            mainInput.style.display = 'inline-block';
+            mainInput.disabled = false;
+            mainInput.value = "";
+            actionBtn.style.display = 'inline-block';
+            endGameButtons.style.display = 'none';
+            wisdomQuote.innerText = "";
+            instruction.innerText = "Introduce un número de 4 cifras:";
+            
+            // Scroll hacia arriba suavemente
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

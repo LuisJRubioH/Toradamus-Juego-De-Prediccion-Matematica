@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toradamus - El Oráculo Aritmético</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header id="main-header">
+        <div class="header-content">
+            <img src="unnamed.jpg" alt="Toradamus" class="header-img">
+            <div class="header-text">
+                <h1>Toradamus</h1>
+                <div class="subtitle">The Prophetic Feline Arithmetic</div>
+            </div>
+        </div>
+        <div class="scroll-indicator">⬇ Desliza para jugar ⬇</div>
+    </header>
+
+    <div class="game-wrapper">
+        <div class="game-layout">
+            <div class="side-panel">
+                <h3>Tus Números</h3>
+                <div id="user-history"></div>
+            </div>
+
+            <div class="main-panel">
+                <div id="running-sum-container" class="running-sum-container">
+                    Σ: <span id="running-sum-val">0</span>
+                </div>
+
+                <div id="input-area" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+                    <p id="instruction" style="color:white; font-size:1.2rem;">Introduce un número de 4 cifras:</p>
+                    <input type="number" id="main-input" placeholder="Ej: 1234" onkeydown="if(event.key==='Enter') processInput()">
+                    <br><br>
+                    <button id="action-btn" onclick="processInput()">Revelar Profecía</button>
+                    
+                    <div id="wisdom-quote"></div>
+
+                    <div id="end-game-buttons" style="display:none; flex-direction:column; gap:10px; width:100%; align-items:center;">
+                        <button id="new-game-btn" class="btn-new-game" onclick="resetGame()">🔮 JUGAR DE NUEVO</button>
+                        <button id="share-btn" class="btn-share" onclick="shareResults()">Compartir Sabiduría</button>
+                    </div>
+                </div>
+
+                <div id="prediction-box" class="prediction-display">
+                    <span style="font-size: 1rem; display:block; opacity: 0.8; font-weight:normal;">Predicción Final:</span>
+                    <span id="prediction-val"></span>
+                </div>
+            </div>
+
+            <div class="side-panel">
+                <h3>Toradamus</h3>
+                <div id="bot-history"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
